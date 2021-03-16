@@ -1,0 +1,73 @@
+<html>
+
+    <head>
+        <style>
+            canvas {
+                position: absolute;
+            }
+
+            video {
+                position: absolute;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>AI 사물 인식 COCO-SSD</h1>
+        <p id="status">COCO-SSD 모델을 로딩중입니다...</p>
+        <video id="video" width="640" height="480" autoplay muted playsinline></video>
+        <canvas id="canvas"></canvas>
+
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+
+        <script>
+            const video = document.getElementById('video');
+            const canvas = document.getElementById("canvas");
+            const context = canvas.getContext("2d");
+
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    video.onloadedmetadata = function (e) {
+                        video.play();
+                    };
+                });
+            const c_width = video.width;
+            const c_height = video.height;
+            document.getElementById('canvas').width = c_width;
+            document.getElementById('canvas').height = c_height;
+            console.log(c_width, c_height);
+           
+            const font = "24px helvetica";
+            context.font = font;
+            context.textBaseline = "top";
+
+            cocoSsd.load().then(model => {
+                document.getElementById('status').innerHTML = 'COCO-SSD 모델 로딩이 완료되었습니다';
+
+                predict()
+
+                async function predict() {
+                    context.drawImage(video, 0, 0, c_width, c_height)
+                    const predictions = await model.detect(canvas)
+                    for (let i = 0; i < predictions.length; i++) {
+                        let percentage = parseInt(predictions[i].score * 100);
+                        const x = predictions[i].bbox[0];
+                        const y = predictions[i].bbox[1];
+                        const width = predictions[i].bbox[2];
+                        const height = predictions[i].bbox[3];
+                        context.beginPath();
+                        context.strokeStyle = "#2fff00";
+                        context.rect(x, y, width, height);
+                        context.stroke();
+                        let str = `${predictions[i].class} : ${percentage}%`
+                        context.strokeText(str, x, y);
+                    }
+                    requestAnimationFrame(predict)
+                }
+            });
+        </script>
+    </body>
+
+</html>

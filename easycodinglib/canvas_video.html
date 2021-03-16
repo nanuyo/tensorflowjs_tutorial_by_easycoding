@@ -1,0 +1,54 @@
+<head>
+    <style>
+        canvas {
+            position: absolute;
+        }
+
+        video {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="video" width="640" height="480" autoplay muted playsinline></video>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(function (stream) {
+                video.srcObject = stream;
+                video.onloadedmetadata = function (e) {
+                    video.play();
+                };
+            });
+        const c_width = video.width;
+        const c_height = video.height;
+        document.getElementById('canvas').width = c_width;
+        document.getElementById('canvas').height = c_height;
+        console.log(c_width, c_height);
+
+        const font = "24px helvetica";
+        context.font = font;
+        context.textBaseline = "top";
+
+
+        predict()
+
+        function predict() {
+            context.drawImage(video, 0, 0, c_width, c_height)
+            context.beginPath();
+            context.strokeStyle = "#2fff00";
+            context.rect(0, 0, 80, 100);
+            context.stroke();
+            let str = "Test";
+            // context.fillText(str, 0, 0);
+            context.strokeText(str, 0, 0);
+            requestAnimationFrame(predict)
+        }
+    </script>
+</body>

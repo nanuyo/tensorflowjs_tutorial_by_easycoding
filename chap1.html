@@ -6,9 +6,18 @@
         <img id="img" src="dog.jpg"></img>
         <script>
             const img = document.getElementById('img');
+            console.log(mobilenet);
+            for (x in mobilenet)
+                console.log(x);
+
             mobilenet.load().then(model => {
+                console.log(model);
+                for (x in model)
+                    console.log(x);
                 model.classify(img).then(predictions => {
                     console.log('Predictions: ', predictions);
+                    for (x in predictions)
+                        console.log(x);
                 });
             });
         </script>

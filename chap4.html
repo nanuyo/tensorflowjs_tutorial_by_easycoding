@@ -1,0 +1,24 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+        <h1>AI 사물 인식 COCO-SSD</h1>
+        <p id="status">COCO-SSD 모델을 로딩중입니다...</p>
+        <img id="img" src="dog.jpg"></img>
+        <h1 id="result"></h1>
+
+        <script>
+            const img = document.getElementById('img');
+            const result = document.getElementById('result');
+
+            cocoSsd.load().then(model => {
+                document.getElementById('status').innerHTML = 'COCO-SSD 모델 로딩이 완료되었습니다';
+                model.detect(img).then(predictions => {
+                    console.log('Predictions: ', predictions);
+                    let percentage = parseInt(predictions[0].score * 100);
+                    result.innerHTML = `${predictions[0].class} ` + `${percentage}%`;
+                });
+            });
+        </script>
+    </body>
+</html>

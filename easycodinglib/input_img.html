@@ -1,0 +1,24 @@
+<html>
+
+    <body>
+        <input id="input" type="file" name="file" />
+        <img id="img">
+
+        <script>
+            let img = document.getElementById('img');
+            let input = document.getElementById('input');
+
+            img.src = "dog.jpg";
+            
+            input.addEventListener('change', (e) => {
+                img.src = URL.createObjectURL(e.target.files[0]);
+            }, false);
+
+            img.onload = function () {
+                //Do something
+            };
+        </script>
+
+    </body>
+
+</html>

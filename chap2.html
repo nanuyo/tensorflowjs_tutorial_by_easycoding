@@ -7,9 +7,19 @@
 
         <script>
             const img = document.getElementById('img');
+            console.log(cocoSsd);
+            for (x in cocoSsd)
+                console.log(x);
+
             cocoSsd.load().then(model => {
+                console.log(model);
+                for (x in model)
+                    console.log(x);
+
                 model.detect(img).then(predictions => {
                     console.log('Predictions: ', predictions);
+                    for (x in predictions)
+                        console.log(x);
                 });
             });
         </script>

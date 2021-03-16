@@ -1,0 +1,24 @@
+<html>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"> </script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"> </script>
+
+        <h1>AI 사물 인식-Mobilenet</h1>
+        <p id="status">Mobilenet 모델을 로딩중입니다...</p>
+        <img id="img" src="dog.jpg"></img>
+        <h1 id="result"></h1>
+
+        <script>
+            const img = document.getElementById('img');
+            const result = document.getElementById('result');
+
+            mobilenet.load().then(model => {
+                document.getElementById('status').innerHTML = 'Mobilenet 모델 로딩이 완료되었습니다';
+                model.classify(img).then(predictions => {
+                    let percentage = parseInt(predictions[0].probability * 100);
+                    result.innerHTML = `${predictions[0].className} ` + `${percentage}%`;
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,29 +1,28 @@
 <html>
 
-    <body>
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
-        <img id="img" src="dog.jpg" />
+<body>
+    <img id="img" src="dog.jpg" />
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+    <script>
+        const img = document.getElementById('img');
+        console.log(cocoSsd);
+        for (x in cocoSsd)
+            console.log(x);
 
-        <script>
-            const img = document.getElementById('img');
-            console.log(cocoSsd);
-            for (x in cocoSsd)
+        cocoSsd.load().then(model => {
+            console.log(model);
+            for (x in model)
                 console.log(x);
 
-            cocoSsd.load().then(model => {
-                console.log(model);
-                for (x in model)
+            model.detect(img).then(predictions => {
+                console.log('Predictions: ', predictions);
+                for (x in predictions)
                     console.log(x);
-
-                model.detect(img).then(predictions => {
-                    console.log('Predictions: ', predictions);
-                    for (x in predictions)
-                        console.log(x);
-                });
             });
-        </script>
+        });
+    </script>
 
-    </body>
+</body>
 
 </html>

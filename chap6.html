@@ -1,39 +1,39 @@
 <html>
 
-    <body>
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
-        <h1>AI 사물 인식 COCO-SSD</h1>
-        <p id="status">COCO-SSD 모델을 로딩중입니다...</p>
-        <img id="img"></img>
-        <h1 id="result"></h1>
-        <input id="input" type="file" name="file" />
+<body>
+    <h1>AI 사물 인식 COCO-SSD</h1>
+    <p id="status">COCO-SSD 모델을 로딩중입니다...</p>
+    <img id="img"></img>
+    <h1 id="result"></h1>
+    <input id="input" type="file" name="file" />
 
-        <script>
-            const img = document.getElementById('img');
-            const result = document.getElementById('result');
-            let input = document.getElementById('input');
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+    <script>
+        const img = document.getElementById('img');
+        const result = document.getElementById('result');
+        let input = document.getElementById('input');
 
-            cocoSsd.load().then(model => {
-                document.getElementById('status').innerHTML = 'COCO-SSD 모델 로딩이 완료되었습니다';
-                function run() {
-                    model.detect(img).then(predictions => {
-                        console.log('Predictions: ', predictions);
-                        let percentage = parseInt(predictions[0].score * 100);
-                        result.innerHTML = `${predictions[0].class} ` + `${percentage}%`;
-                    });
-                }
-                img.src = "dog.jpg";
-                input.addEventListener('change', (e) => {
-                    img.src = URL.createObjectURL(e.target.files[0]);
-                }, false);
+        cocoSsd.load().then(model => {
+            document.getElementById('status').innerHTML = 'COCO-SSD 모델 로딩이 완료되었습니다';
+            function run() {
+                model.detect(img).then(predictions => {
+                    console.log('Predictions: ', predictions);
+                    let percentage = parseInt(predictions[0].score * 100);
+                    result.innerHTML = `${predictions[0].class} ` + `${percentage}%`;
+                });
+            }
+            img.src = "dog.jpg";
+            input.addEventListener('change', (e) => {
+                img.src = URL.createObjectURL(e.target.files[0]);
+            }, false);
 
-                img.onload = function () {
-                    run();
-                };
+            img.onload = function () {
+                run();
+            };
 
-            });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 
 </html>

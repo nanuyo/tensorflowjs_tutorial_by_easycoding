@@ -22,9 +22,6 @@
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
             .then(function (stream) {
                 video.srcObject = stream;
-                video.onloadedmetadata = function (e) {
-                    video.play();
-                };
             });
         const c_width = video.width;
         const c_height = video.height;

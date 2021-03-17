@@ -1,0 +1,11 @@
+<body>
+    <video id="video" width="640" height="480" autoplay muted playsinline></video>
+    <script>
+        const video = document.getElementById('video');
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(function (stream) {
+                video.srcObject = stream;
+            });
+    </script>
+</body>

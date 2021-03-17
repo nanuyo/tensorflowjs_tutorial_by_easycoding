@@ -7,7 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"> </script>
     <script>
         const img = document.getElementById('img');
+
         console.log(mobilenet);
+
         mobilenet.load().then(model => {
             console.log(model);
             model.classify(img).then(predictions => {

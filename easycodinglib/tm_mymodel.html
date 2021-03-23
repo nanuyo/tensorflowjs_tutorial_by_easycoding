@@ -1,0 +1,23 @@
+<html>
+
+<body>
+    <img id="img" src="dog.jpg"></img>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    <script>
+        const modelPath = "../my_model/";
+        const modelURL = modelPath + "model.json";
+        const metadataURL = modelPath + "metadata.json";
+
+        const img = document.getElementById('img');
+        console.log(tmImage);
+        tmImage.load(modelURL, metadataURL).then(model => {
+            console.log(model);
+            model.predict(img).then(predictions => {
+                console.log('Predictions: ', predictions);
+            });
+        });
+    </script>
+</body>
+
+</html>

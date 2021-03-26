@@ -39,6 +39,9 @@
         function predict() {
             context.drawImage(video, 0, 0, c_width, c_height)
             context.beginPath();
+            //party mode
+            //const color = Math.floor(Math.random() * 16777215).toString(16);
+            //context.strokeStyle = '#' + color
             context.strokeStyle = "#2fff00";
             context.rect(0, 0, 80, 100);
             context.stroke();

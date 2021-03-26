@@ -16,8 +16,8 @@
     <canvas id="canvas"></canvas>
 
     <script>
-        const canvas = document.getElementById("canvas");
         const img = document.getElementById("img");
+        const canvas = document.getElementById("canvas");
         const context = canvas.getContext("2d");
 
         img.onload = function () {
@@ -34,9 +34,6 @@
             context.beginPath();
             context.lineWidth = 1;
             context.strokeStyle = "#2fff00"
-            //party mode
-            //const color = Math.floor(Math.random() * 16777215).toString(16);
-            //context.strokeStyle = '#' + color
             context.rect(0, 0, canvas.width / 2, canvas.height / 2);
             context.stroke();
 

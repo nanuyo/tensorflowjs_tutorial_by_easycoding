@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <style>
+        /* 이미지에 캔버스를 겹쳐서 그릴때는 아래 주석 해제 */
+        canvas {
+            position: absolute;
+        }
+
+        img {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <img id="img" src="image1.jpg" />
+    <canvas id="canvas"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+    <script>
+        const img = document.getElementById('img');
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+
+
+        cocoSsd.load().then(model => {
+            model.detect(img).then(predictions => {
+                console.log('Predictions: ', predictions);
+                console.log(img.width, img.height);
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                context.drawImage(img, 0, 0);
+                for (let i = 0; i < predictions.length; i++) {
+                    context.beginPath();
+                    context.lineWidth = 1;
+                    context.strokeStyle = "#2fff00"
+                    context.rect(...predictions[i].bbox);
+                    context.stroke();
+                    context.font = '24px Arial';
+                    context.fillStyle = '#2fff00';
+                    context.fillText(predictions[i].class + ' ' + parseInt(predictions[i].score * 100) + '%', predictions[i].bbox[0], predictions[i].bbox[1]);
+
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<html>
+
+<body>
+
+    <div id="result"></div>
+
+    <script>
+        const result = document.getElementById("result");
+
+        for (let i = 0; i < 5; i++) {
+            const element = document.createElement("h1")
+            //const element = document.createElement("p")
+            result.appendChild(element);
+            result.childNodes[i].innerHTML = "Test" + ' ' + i;
+        }
+
+        // 생성한 모든 차일드노드를 지울때 사용
+        // while (result.firstChild) {
+        //     result.removeChild(result.lastChild);
+        // }
+
+    </script>
+</body>
+
+</html>

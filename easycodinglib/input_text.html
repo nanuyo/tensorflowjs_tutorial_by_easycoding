@@ -1,0 +1,16 @@
+<html>
+
+<body>
+    <input id="input" type='text' onchange='printName()' />
+    <div id='result'></div>
+
+    <script>
+        function printName() {
+            const input = document.getElementById('input').value;
+            document.getElementById('result').innerText = input;
+        };
+    </script>
+
+</body>
+
+</html>

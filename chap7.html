@@ -1,0 +1,57 @@
+<html>
+
+<body>
+    <img id="img"></img>
+    <input id="input" type="file" name="file" />
+    <h1 id='result'></h1>
+    <h1 id='warning'></h1>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+    <script>
+        const img = document.getElementById('img');
+        const result = document.getElementById('result');
+        const input = document.getElementById('input');
+        const warning = document.getElementById('warning');
+
+        cocoSsd.load().then(model => {
+
+            function run() {
+                model.detect(img).then(predictions => {
+                    console.log('Predictions: ', predictions);
+                    for (let i = 0; i < predictions.length; i++) {
+
+                        if (predictions[i].class === 'dog') {
+                            result.innerHTML = predictions[i].class + ' ' + parseInt(predictions[i].score * 100) + '%';
+                            warning.innerHTML = '주의!! 강아지가 포함된 사진을 올리셨습니다. 허가 받은 판매자가 등록번호 없이 동물을 사고 파는것은 불법입니다. 주의 하시기 바랍니다'
+                        }
+                        else if (predictions[i].class === 'cat') {
+                            result.innerHTML = predictions[i].class + ' ' + parseInt(predictions[i].score * 100) + '%';
+                            warning.innerHTML = '주의!! 고양이가 포함된 사진을 올리셨습니다. 허가 받은 판매자가 등록번호 없이 동물을 사고 파는것은 불법입니다. 주의 하시기 바랍니다'
+                        }
+                        else if (predictions[i].class === 'person') {
+                            result.innerHTML = predictions[i].class + ' ' + parseInt(predictions[i].score * 100) + '%';
+                            warning.innerHTML = '주의!! 사람이 포함된 사진을 올리셨습니다. 사람을 입양, 또는 판매 한다는 글을 올리시면 경찰 조사를 받으실수 있습니다. 경우에 따라서는 형사처벌도 받을수 있으니 주의 하시기 바랍니다. 주의 하시기 바랍니다'
+                        } else {
+                            result.innerHTML = predictions[i].class + ' ' + parseInt(predictions[i].score * 100) + '%';
+                            warning.innerHTML = ''
+                        }
+                    }
+                });
+            }
+
+            img.src = "dog.jpg";
+
+            input.addEventListener('change', (e) => {
+                img.src = URL.createObjectURL(e.target.files[0]);
+            }, false);
+
+            img.onload = function () {
+                run();
+            };
+
+        });
+    </script>
+</body>
+
+</html>

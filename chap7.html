@@ -22,11 +22,11 @@
                     for (let i = 0; i < predictions.length; i++) {
                         result.innerHTML = predictions[i].class + ' ' + parseInt(predictions[i].score * 100) + '%';
                         if (predictions[i].class === 'dog') {
-                            warning.innerHTML = '주의!! 강아지가 포함된 사진을 올리셨습니다. 허가 받은 판매자가 등록번호 없이 동물을 사고 파는것은 불법입니다. 주의 하시기 바랍니다';
+                            warning.innerHTML = '주의!! 강아지가 포함된 사진을 올리셨습니다. 허가 받지 않은 판매자가 등록번호 없이 동물을 사고 파는것은 불법입니다. 주의 하시기 바랍니다';
                             break;
                         }
                         else if (predictions[i].class === 'cat') {
-                            warning.innerHTML = '주의!! 고양이가 포함된 사진을 올리셨습니다. 허가 받은 판매자가 등록번호 없이 동물을 사고 파는것은 불법입니다. 주의 하시기 바랍니다'
+                            warning.innerHTML = '주의!! 고양이가 포함된 사진을 올리셨습니다. 허가 받지 않은 판매자가 등록번호 없이 동물을 사고 파는것은 불법입니다. 주의 하시기 바랍니다'
                             break;
                         }
                         else if (predictions[i].class === 'person') {

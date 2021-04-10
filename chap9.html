@@ -1,0 +1,118 @@
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+    <style>
+        canvas {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+
+        }
+
+        video {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1>EasyCoding 실시간 신체 분절</h1>
+    <video id="video" width="640" height="480" autoplay muted playsinline></video>
+    <!-- <video id="video" width="640" height="480" src="../images/model.mp4" autoplay muted playsinline></video> -->
+    <canvas id="canvas"></canvas>
+
+</body>
+
+<script>
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext("2d");
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(function (stream) {
+            video.srcObject = stream;
+        });
+
+
+
+    bodyPix.load().then(model => {
+
+        video.onloadeddata = (event) => {
+            predict();
+        };
+
+        function predict() {
+            //model.segmentPerson(video).then(segmentation => {
+            model.segmentPersonParts(video).then(segmentation => {
+                //model.segmentMultiPerson(video).then(segmentation => {
+                //model.segmentMultiPersonParts(video).then(segmentation => {
+                console.log(segmentation);
+                canvas.width = video.width;
+                canvas.height = video.height;
+
+                // const foregroundColor = { r: 255, g: 255, b: 255, a: 255 };
+                // const backgroundColor = { r: 0, g: 0, b: 0, a: 255 };
+                // const mask = bodyPix.toMask(
+                //     segmentation, foregroundColor, backgroundColor,
+                //     true);
+                // const mask = bodyPix.toMask(segmentation);
+                const mask = bodyPix.toColoredPartMask(segmentation);
+
+                const opacity = 0.7;
+                const flipHorizontal = false;
+                const maskBlurAmount = 0; //0~20
+
+
+                // bodyPix.drawMask(
+                //     canvas,
+                //     video,
+                //     mask,
+                //     opacity,
+                //     maskBlurAmount,
+                //     flipHorizontal
+                // );
+
+                const pixelCellWidth = 10.0;
+                bodyPix.drawPixelatedMask(
+                    canvas, video, mask,
+                    opacity, maskBlurAmount, flipHorizontal,
+                    pixelCellWidth);
+
+                //~Parts 에서만 유효
+                // const blurBodyPartIds = [0, 1];
+                // bodyPix.blurBodyPart(
+                //     canvas, video, segmentation,
+                //     blurBodyPartIds,
+                //     20,  //blurBodyPartAmount 1~20
+                //     3, //edgeBlurAmount 1~20
+                //     flipHorizontal);
+
+                //segmentPerson, segmentMultiPerson 에서만 유효, ~Parts 에서는 무효
+                // bodyPix.drawBokehEffect(
+                //     canvas, video, segmentation,
+                //     20,//BackGroundBlur 1~20
+                //     20, //EdgeBlur 1~20
+                //     flipHorizontal);
+
+
+                for (let i = 0; i < segmentation.allPoses.length; i++) {
+                    drawKeypoints(segmentation.allPoses[i].keypoints, 0.6, context);
+                    drawSkeleton(segmentation.allPoses[i].keypoints, 0.6, context);
+                }
+            });
+            requestAnimationFrame(predict);
+        }
+    });
+</script>
+<script src="../easycodinglib/posenet.js"></script>
+
+</html>

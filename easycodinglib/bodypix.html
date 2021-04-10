@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+</head>
+
+<body>
+    <img id='image' src='../images/persons.jpg' crossorigin='anonymous' />
+</body>
+<script>
+    const img = document.getElementById('image');
+
+    async function loadAndPredict() {
+        console.log(bodyPix);
+        const net = await bodyPix.load();
+        /**
+         * One of:
+         *   - net.segmentPerson
+         *   - net.segmentPersonParts
+         *   - net.segmentMultiPerson
+         *   - net.segmentMultiPersonParts
+         */
+        const segmentation = await net.segmentPerson(img);
+        console.log(segmentation);
+    }
+    loadAndPredict();
+</script>
+
+</html>

@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+</head>
+
+<body>
+    <img id='image' src='../images/persons.jpg' crossorigin='anonymous' />
+    <canvas id="canvas"></canvas>
+</body>
+
+<script>
+    const img = document.getElementById('image');
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+
+    loadAndPredict();
+
+    async function loadAndPredict() {
+        const net = await bodyPix.load();
+        const segmentation = await net.segmentMultiPerson(img);
+        console.log(segmentation);
+        const backgroundDarkeningMask = bodyPix.toMask(segmentation);
+        // const foregroundColor = { r: 0, g: 0, b: 0, a: 255 };
+        // const backgroundColor = { r: 0, g: 0, b: 0, a: 0 };
+        // const backgroundDarkeningMask = bodyPix.toMask(
+        //     segmentation, foregroundColor, backgroundColor);
+
+        const opacity = 0.7;
+        const flipHorizontal = false;
+        const maskBlurAmount = 3;
+        bodyPix.drawMask(
+            canvas, img, backgroundDarkeningMask, opacity, maskBlurAmount,
+            flipHorizontal);
+    }
+
+</script>
+
+
+</html>

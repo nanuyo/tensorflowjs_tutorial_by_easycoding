@@ -1,0 +1,95 @@
+<html>
+
+<head>
+    <!-- Load TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+    <!-- Load BodyPix -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+    <!-- Load Posenet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+    <style>
+        canvas {
+            position: absolute;
+        }
+
+        img {
+            position: absolute;
+        }
+    </style>
+
+</head>
+
+<body>
+    <img id='image' src='../images/persons.jpg' crossorigin='anonymous' />
+    <canvas id="canvas"></canvas>
+</body>
+
+<script>
+    const img = document.getElementById('image');
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    var sunglassimg = new Image();
+    var maskimg = new Image();
+    var tshirtimg = new Image();
+    var pentsimg = new Image();
+
+    sunglassimg.src = '../images/sunglass_tr_sm.png';
+    maskimg.src = '../images/mask_tr_sm.png';
+    tshirtimg.src = '../images/tshirt_tr.png';
+    pentsimg.src = '../images/pents.png';
+
+    sunglassimg.onload = function () {
+        maskimg.onload = function () {
+            loadAndPredict();
+        }
+    }
+
+    async function loadAndPredict() {
+        const net = await bodyPix.load();
+
+        /**
+         * One of (see documentation below):
+         *   - net.segmentPerson
+         *   - net.segmentPersonParts
+         *   - net.segmentMultiPerson
+         *   - net.segmentMultiPersonParts
+         * See documentation below for details on each method.
+         */
+        const segmentation = await net.segmentPerson(img);
+        console.log(segmentation);
+        canvas.width = img.width;
+        canvas.height = img.height;
+        context.drawImage(img, 0, 0);
+        context.strokeStyle = "#2fff00"
+
+        for (let i = 0; i < segmentation.allPoses.length; i++) {
+            drawKeypoints(segmentation.allPoses[i].keypoints, 0.6, context);
+            drawSkeleton(segmentation.allPoses[i].keypoints, 0.6, context);
+        }
+
+        for (let i = 0; i < segmentation.allPoses.length; i++) {
+            for (let j = 0; j < segmentation.allPoses[i].keypoints.length; j++) {
+                //context.fillStyle = "#FF0000";
+                //context.fillRect(segmentation.allPoses[i].keypoints[j].position.x, segmentation.allPoses[i].keypoints[j].position.y, 5, 5);
+
+                if (segmentation.allPoses[i].keypoints[j].part === "rightEye")
+                    context.drawImage(sunglassimg, segmentation.allPoses[i].keypoints[j].position.x - 15, segmentation.allPoses[i].keypoints[j].position.y - 10);
+
+                if (segmentation.allPoses[i].keypoints[j].part === "nose")
+                    context.drawImage(maskimg, segmentation.allPoses[i].keypoints[j].position.x - maskimg.width / 2, segmentation.allPoses[i].keypoints[j].position.y);
+
+                // if (segmentation.allPoses[i].keypoints[j].part === "rightShoulder")
+                //     context.drawImage(tshirtimg, segmentation.allPoses[i].keypoints[j].position.x - maskimg.width / 2, segmentation.allPoses[i].keypoints[j].position.y - 50);
+
+                // if (segmentation.allPoses[i].keypoints[j].part === "rightHip")
+                //     context.drawImage(pentsimg, segmentation.allPoses[i].keypoints[j].position.x - maskimg.width / 2, segmentation.allPoses[i].keypoints[j].position.y - 50);
+            }
+
+        }
+
+    }
+
+</script>
+<script src="posenet.js"></script>
+
+</html>

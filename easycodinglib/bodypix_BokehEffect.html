@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+</head>
+
+<body>
+    <img id='image' src='../images/persons.jpg' crossorigin='anonymous' />
+    <canvas id="canvas"></canvas>
+</body>
+
+<script>
+    const img = document.getElementById('image');
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    loadAndPredict();
+    async function loadAndPredict() {
+        console.log(bodyPix);
+        const net = await bodyPix.load();
+        const segmentation = await net.segmentMultiPerson(img);
+        const backgroundBlurAmount = 3;
+        const edgeBlurAmount = 3;
+        const flipHorizontal = false;
+        bodyPix.drawBokehEffect(
+            canvas, img, segmentation, backgroundBlurAmount,
+            edgeBlurAmount, flipHorizontal);
+    }
+</script>
+
+
+</html>

@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+</head>
+
+<body>
+    <img id='image' src='../images/persons.jpg' crossorigin='anonymous' />
+    <canvas id="canvas"></canvas>
+</body>
+
+<script>
+    const img = document.getElementById('image');
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+
+    loadAndPredict();
+
+    async function loadAndPredict() {
+        const net = await bodyPix.load();
+        /**
+        * One of (see documentation below):
+        *   - net.segmentPerson
+        *   - net.segmentPersonParts
+        *   - net.segmentMultiPerson
+        *   - net.segmentMultiPersonParts
+        * See documentation below for details on each method.
+        */
+
+        //const segmentation = await net.segmentPerson(img);
+        //const segmentation = await net.segmentPersonParts(img);
+        const segmentation = await net.segmentMultiPersonParts(img);
+        console.log(segmentation);
+        const coloredPartMask = bodyPix.toColoredPartMask(segmentation);
+        const opacity = 0.7;
+        const flipHorizontal = false;
+        const maskBlurAmount = 0;
+        const pixelCellWidth = 10.0;
+        bodyPix.drawPixelatedMask(
+            canvas, img, coloredPartMask,
+            opacity, maskBlurAmount, flipHorizontal,
+            pixelCellWidth);
+    }
+
+</script>
+
+
+</html>

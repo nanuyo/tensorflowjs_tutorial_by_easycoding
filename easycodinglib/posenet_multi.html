@@ -1,9 +1,7 @@
 <html>
 
 <head>
-    <!-- Load TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <!-- Load Posenet -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
     <style>
         /* 이미지에 캔버스를 겹쳐서 그릴때는 아래 주석 해제 */
@@ -18,31 +16,37 @@
 </head>
 
 <body>
-    <img id='img' src='../images/person.jpg ' />
+    <img id='img' src='../images/persons.jpg ' />
     <canvas id="canvas"></canvas>
 </body>
-<script>
-    var flipHorizontal = false;
 
+<script>
     const img = document.getElementById('img');
     const canvas = document.getElementById("canvas");
     const context = canvas.getContext("2d");
 
-    posenet.load().then(function (net) {
-        const pose = net.estimateSinglePose(img, {
-            flipHorizontal: false
-        });
+    posenet.load({
+        //architecture: 'ResNet50',
+        architecture: 'MobileNetV1',
+
+    }).then(function (net) {
+        const pose = net.estimateMultiplePoses(img,
+            {
+                maxDetections: 100,
+            }
+        );
         return pose;
     }).then(function (pose) {
         console.log(pose);
         console.log(img.width, img.height);
         canvas.width = img.width;
         canvas.height = img.height;
-        drawKeypoints(pose.keypoints, 0.6, context);
-        drawSkeleton(pose.keypoints, 0.6, context);
+        for (let i = 0; i < pose.length; i++) {
+            drawKeypoints(pose[i].keypoints, 0.6, context);
+            drawSkeleton(pose[i].keypoints, 0.6, context);
+        }
     })
 </script>
 <script src="posenet.js"></script>
-
 
 </html>

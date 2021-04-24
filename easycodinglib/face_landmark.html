@@ -1,0 +1,38 @@
+<html>
+
+<head>
+  <script src="https://unpkg.com/@tensorflow/tfjs-core@2.4.0/dist/tf-core.js"></script>
+  <script src="https://unpkg.com/@tensorflow/tfjs-converter@2.4.0/dist/tf-converter.js"></script>
+  <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.4.0/dist/tf-backend-webgl.js"></script>
+  <script
+    src="https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.js"></script>
+</head>
+
+<body>
+  <img id="img" src="../images/person.jpg"></img>
+</body>
+<script>
+  let img = document.querySelector("img");
+  async function main() {
+    const model = await faceLandmarksDetection.load(
+      faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
+    const predictions = await model.estimateFaces({
+      input: img
+    });
+    console.log(predictions);
+
+    if (predictions.length > 0) {
+      for (let i = 0; i < predictions.length; i++) {
+        const keypoints = predictions[i].scaledMesh;
+        for (let i = 0; i < keypoints.length; i++) {
+          const [x, y, z] = keypoints[i];
+          console.log(`Keypoint ${i}: [${x}, ${y}, ${z}]`);
+        }
+      }
+    }
+  }
+
+  main();
+</script>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0, user-scalable=no">
+    <script src="https://unpkg.com/@tensorflow/tfjs-core@2.4.0/dist/tf-core.js"></script>
+    <script src="https://unpkg.com/@tensorflow/tfjs-converter@2.4.0/dist/tf-converter.js"></script>
+    <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.4.0/dist/tf-backend-webgl.js"></script>
+    <script src="https://unpkg.com/@tensorflow-models/handpose@0.0.6/dist/handpose.js"></script>
+
+    <!-- Load three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.106.2/build/three.min.js"></script>
+    <!-- Load scatter-gl.js -->
+    <!-- TODO(annxingyuan): Submit a PR to scatter-gl that allows polylines to update in the render loop. -->
+    <script src="https://storage.googleapis.com/learnjs-data/handtrack_staging/scatter-gl.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/scatter-gl@0.0.1/lib/scatter-gl.min.js"></script> -->
+    <style>
+        #canvas-wrapper {
+            position: relative;
+        }
+
+        #canvas-wrapper,
+        #scatter-gl-container {
+            display: inline-block;
+            vertical-align: top;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/stats.js@0.17.0/build/stats.min.js"></script>
+
+</head>
+
+<body>
+    <div id="info"></div>
+    <div id="predictions"></div>
+    <div id="canvas-wrapper">
+        <canvas id="output" style=""></canvas>
+        <video id="video" playsinline style="
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    visibility: hidden;
+    width: auto;
+    height: auto;
+    position: absolute;
+    ">
+        </video>
+    </div>
+    <div id="scatter-gl-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+    <script src="./chap11.js"></script>
+</body>
+
+</html>
